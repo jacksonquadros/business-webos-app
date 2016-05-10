@@ -1,0 +1,29 @@
+<script src="../../js/jquery.js"/></script>
+<script type="text/javascript" src="cke/ckeditor.js"></script>
+
+<textarea cols="80" id="editor1" name="editor1" rows="10"></textarea>
+<script>
+
+var editor = CKEDITOR.replace( 'editor1' );
+
+setInterval(save_data,1000);
+
+function save_data()
+{
+			$.ajax({
+			  type: "GET",
+			  url: "get_save.php",
+			  success: function(got_data){
+			  
+			  $.each(got_data, function (m, ckdata) {
+					CKEDITOR.instances['editor1'].setData(ckdata.now_content);
+				});
+				console.log("save Success");
+				
+				
+			  },
+			  dataType: 'json'
+			});
+}
+		
+</script>

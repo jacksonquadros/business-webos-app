@@ -1,0 +1,74 @@
+
+<div class="f_main_div">
+	<div class="inner_split_top">
+		<div class="top_navigation">
+			<div style="font-size:30px;;padding:0px;color:#000;text-align:center;display:inline-block;width:100%;cursor:default;" id="extra_options">
+			<p class="top_action_fonts" id="recycle_file" onclick="recycle();"><i class="fa fa-undo" aria-hidden="true"></i></p>
+			
+			<p class="top_action_fonts" id="perm_delete" onclick="delete_file_recycle();"><i class="fa fa-trash" aria-hidden="true"></i></p>
+			</div>
+		</div>
+	</div>
+	<div class="inner_split_right">
+		<div class="folder_div" id="folder_div_recycle">
+		
+		</div>
+	</div>
+</div>
+<script>
+get_recycle_files();
+function get_recycle_files(){
+	$.ajax({
+    type: "GET",
+    dataType: 'json',
+    url: 'plugins/file_manager/get_recycle_files.php',
+    success: function(gl){
+	var each_data="";
+	//alert(gl);
+	if(gl==0)
+	{
+	$('#folder_div_recycle').html('<p style="font-size:20px;text-align:center;"><i class="fa fa-trash-o" aria-hidden="true"></i> Recycle bin empty</p>');
+	}else
+	{
+		$.each(gl, function (m, r_data) {
+			console.log(r_data.f_name);
+			each_data+='<input type="radio" id="rec'+r_data.f_type+'_'+r_data.file_id+'" name="radio_files" style="display:none;" f_name="'+r_data.f_name+'" value="'+r_data.file_id+'"/> <label for="rec'+r_data.f_type+'_'+r_data.file_id+'" class="folder_holder_label"> <div class="folder_holder" id="docs" style="font-weight:normal;"> <i class="fa fa-file" aria-hidden="true" style="color:#37474F;"></i> <p class="folder_name">'+r_data.f_name+'</p> </div> </label>';
+			
+			
+		});
+		$('#folder_div_recycle').html(each_data);
+	}	
+    },
+    error: function(){
+		alert("something went wrong");
+    }
+});
+};
+
+function delete_file_recycle()
+{
+var del_val=$("input[type='radio'][name='radio_files']:checked").val();
+	$.ajax({
+		type: "POST",
+		url: "plugins/file_manager/file_recycle_delete.php",
+		data: {'file_val':  del_val },
+		success: function(dcode_cat){
+			alert(dcode_cat);
+			get_recycle_files();
+		}
+		});
+}
+function recycle()
+{
+var prop_val=$("input[type='radio'][name='radio_files']:checked").val();
+	$.ajax({
+		type: "POST",
+		url: "plugins/file_manager/file_recycle_back.php",
+		data: {'file_val':  prop_val },
+		success: function(dcode_prop){
+			alert(dcode_prop);
+			get_recycle_files();
+		}
+		});
+}
+</script>

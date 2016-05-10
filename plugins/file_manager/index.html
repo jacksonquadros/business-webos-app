@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<style>
+		.f_main_div
+		{
+			width:100%;
+			height:100%;
+			background:#fff;
+			overflow:hidden;
+		}
+		.inner_split_right
+		{
+			width:100%;
+			height:80%;
+			float:right;
+			background:#fff;
+			overflow-y:scroll;
+			overflow-x:hidden;
+		}
+		.inner_split_top
+		{
+			width:100%;
+			height:50px;
+			background:#90CAF9;
+			border-bottom:2px solid #cccccc;
+		}
+		.top_navigation
+		{
+			width:100%;
+			height:100%;
+			display:inline-block;
+			overflow:hidden;
+		}
+		.recents_block
+		{
+			width:60%;
+			height:100%;
+			display:inline-block;
+			overflow:hidden;
+		}
+		.upload_block
+		{
+			width:100%;
+			overflow:hidden;
+		}
+		.folder_div
+		{
+			font-size:150px;
+			color:#000;
+			padding-left:10px;
+			padding-top:10px;
+			
+		}
+		.folder_holder
+		{
+			padding:0;
+			display:inline-block;
+			width:200px;
+			height:250px;
+			overflow:hidden;
+			text-align:center;
+		}
+		.folder_holder:hover
+		{
+			background:#ccc;
+		}
+		.folder_holder_label
+		{
+			padding:0px;
+			display:inline-block;
+			width:200px;
+			height:250px;
+			overflow:hidden;
+			text-align:center;
+			
+		}
+		.folder_name
+		{
+			font-size:18px;
+			color:#000;
+			text-align:center;
+			margin-top:-20px;
+		}
+		#show_recents
+		{
+			padding:0px;
+		}
+		.top_action_fonts
+		{
+			text-align:center;
+			display:inline-block;
+			padding:0px 10px 10px 10px;
+		}
+		.top_action_fonts:hover
+		{
+			background:#ccc;
+		}
+		.folder_div input[type="radio"]:checked + label {
+			background-color:#bbb;
+		}
+	</style>
+ </head>
+<body>
+<!-- modal begins-->
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="myModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="gridSystemModalLabel">Rename</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+            <label for="recipient-name" class="control-label">Rename:</label>
+            <input type="text" class="form-control" id="recipient-name">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="save_rename();">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="del_modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="gridSystemModalLabel">Delete</h4>
+      </div>
+      <div class="modal-body">
+        <h3>Are you sure u want to delete this file?</h3>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+        <button type="button" class="btn btn-primary" onclick="delete_file();">Yes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="modal_details">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">File Details</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+            <label for="recipient-name" class="control-label">File name:</label>
+            <input type="text" class="form-control" id="recipient_fname" disabled>
+        </div>
+		
+		<div class="form-group">
+            <label for="recipient-name" class="control-label">File type:</label>
+            <input type="text" class="form-control" id="recipient_type" disabled>
+        </div>
+		
+		<div class="form-group">
+            <label for="recipient-name" class="control-label">File folder:</label>
+            <input type="text" class="form-control" id="recipient_folder" disabled>
+        </div>
+		
+		<div class="form-group">
+            <label for="recipient-name" class="control-label">File uploaded Date and Time:</label>
+            <input type="text" class="form-control" id="recipient_date" disabled>
+        </div>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="img_modal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="destroy_file();"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">File viewer</h4>
+      </div>
+      <div class="modal-body" id="img_disp">
+       
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- modal ends-->
+  <div class="f_main_div">
+	
+	<div class="inner_split_top">
+		<div class="top_navigation" id="top_navigation">
+			<p style="font-size:30px;padding:0px;color:#90A4AE;text-align:center;display:inline-block;width:9%;cursor:default;" class="back_btn"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i></p>
+			
+			<div style="font-size:30px;;padding:0px;color:#000;text-align:center;display:inline-block;width:80%;cursor:default;" id="extra_options">
+			<p class="top_action_fonts" id="open_app"><i class="fa fa-rocket" aria-hidden="true"></i></p>
+			
+			<p class="top_action_fonts" id="rename"><i class="fa fa-i-cursor" aria-hidden="true"></i></p>
+			
+			<p class="top_action_fonts" id="delete"><i class="fa fa-trash" aria-hidden="true"></i></p>
+			
+			<p class="top_action_fonts" id="properties"><i class="fa fa-info-circle" aria-hidden="true"></i></p>
+			
+			<p class="top_action_fonts" id="downlaod"><i class="fa fa-download" aria-hidden="true"></i></p>
+			</div>
+			
+			<p style="width:9%;font-size:30px;padding:0px;float:right;display:inline-block;cursor:default;" class="back_btn"><i class="fa fa-times close_fm" aria-hidden="true" style="color:#000;"></i></p>
+		</div>
+		<!--<div class="recents_block" id="recents_block">
+			<div style="padding-left:0px;"><h5>Recent Files</h5></div>
+			<div id="show_recents"></div>
+		</div>-->
+		
+	</div>
+	<div class="inner_split_right">
+		<div class="folder_div" id="folder_div_main">
+		
+
+  <input type="radio" id="radio00" name="radio_main" style="display:none;"/>
+  <label for="radio00" class="folder_holder_label">
+  <div class="folder_holder" id="docs"> <i class="fa fa-folder" aria-hidden="true" style="color:#f44336;"></i> <p class="folder_name">Documents</p> </div>
+  </label>
+  
+  <input type="radio" id="radio01" name="radio_main" style="display:none;"/>
+  <label for="radio01" class="folder_holder_label">
+  <div class="folder_holder" id="images"> <i class="fa fa-folder" aria-hidden="true" style="color:#9C27B0;"></i> <p class="folder_name">Images</p> </div>
+  </label>
+  
+  <input type="radio" id="radio02" name="radio_main" style="display:none;"/>
+  <label for="radio02" class="folder_holder_label">
+  <div class="folder_holder" id="audio"> <i class="fa fa-folder" aria-hidden="true" style="color:#2196F3;"></i> <p class="folder_name">Audio</p> </div>
+  </label>
+  
+  <input type="radio" id="radio03" name="radio_main" style="display:none;"/>
+  <label for="radio03" class="folder_holder_label">
+  <div class="folder_holder" id="videos"> <i class="fa fa-folder" aria-hidden="true" style="color:#4CAF50;"></i> <p class="folder_name">Videos</p> </div>
+  </label>
+  
+  <input type="radio" id="radio04" name="radio_main" style="display:none;"/>
+  <label for="radio04" class="folder_holder_label">
+  <div class="folder_holder" id="compressed"> <i class="fa fa-folder" aria-hidden="true" style="color:#607D8B;"></i> <p class="folder_name">Compressed</p> </div>
+  </label>
+  
+  <input type="radio" id="radio05" name="radio_main" style="display:none;"/>
+  <label for="radio05" class="folder_holder_label">
+  <div class="folder_holder" id="others"> <i class="fa fa-folder" aria-hidden="true" style="color:#795548;"></i> <p class="folder_name">Others</p> </div>
+  </label>
+
+		</div>
+		<div class="folder_div" id="folder_div">
+			
+		</div>
+	</div>
+	
+  </div>
+  
+
+
+<script>
+$('body').on( 'dblclick','.temp_notify',function(){
+$(this).hide();
+});
+function destroy_file()
+{
+$('.temp_file').remove();
+}
+
+//notify upload file
+$(".all_notify").append('<br/><form method="post" name="multiple_upload_form" id="multiple_upload_form" enctype="multipart/form-data" action="upload.php"> <input type="hidden" name="image_form_submit" value="1"/> <div class="upload_block" id="upload_block"> <input type="file" name="sort_file[]" id="sort_file" multiple style="color:#fff;display:none;"> <label for="sort_file" style="overflow:hidden;margin:0px;background:#D4E157;margin:2px;padding:5px;text-align:center;border-radius:2px;width:100%;">Click here to Upload a File</label></div> </form> ');
+//extra options onclick
+$('.top_action_fonts').click(function()
+{
+	var ext_lick=this.id;
+	if($("input[type='radio'][name='radio_files']:checked").is(':checked')) {
+	var f_val=$("input[type='radio'][name='radio_files']:checked").val();
+	
+		if(ext_lick=="open_app")
+		{
+			open_file(f_val);
+		}else if(ext_lick=="rename")
+		{
+			//alert("rename"+f_val);
+			$('#recipient-name').val($("input[type='radio'][name='radio_files']:checked").attr("f_name"));
+			$('#myModal').modal('show');
+		}else if(ext_lick=="delete")
+		{
+			$('#del_modal').modal('show');
+		}else if(ext_lick=="properties")
+		{
+			view_properties(f_val);
+		}else if(ext_lick=="downlaod")
+		{
+			download_file(f_val);
+		}else
+		{
+			alert("wrong input");
+		}
+	
+	}else{
+	alert("Please choose a file"); 
+	}
+	
+	
+});
+function open_file(file_op_val)
+{
+	$.ajax({
+		type: "POST",
+		url: "plugins/file_manager/file_open.php",
+		data: {'file_val':  file_op_val },
+		dataType: 'json',
+		success: function(file_op){
+		var arrdocs = ["pdf","PDF"];
+		var arrimg = ["jpg","JPG","jpeg", "JPEG", "png", "PNG","bmp","BMP","exif","EXIF","tiff","TIFF","gif","GIF","ico","ICO","img","IMG"];
+		var arraudio = ["aac","AAC","m4a", "M4A","mp3","MP3","OGG","ogg","wav","WAV"];
+		var arrvideo = ["webm","WEBM","flv", "FLV","avi","AVI","wmv","WMV","mp4","MP4","mpg","MPG","3GP","3gp","mpg","MPG"];
+		
+			$.each(file_op, function (x, op_data) {
+				var f_type_op=op_data.file_type;
+				//alert(f_type_op);
+				if(isInArray(arrimg, f_type_op))
+				{
+					$("#img_disp").html('<span class="temp_file"><img src="plugins/file_manager/'+op_data.file_path+'" style="width:100%"/></span>');
+					$('#img_modal').modal('show');
+				}else if(isInArray(arraudio, f_type_op))
+				{
+					$("#img_disp").html('<span class="temp_file"><audio controls> <source src="plugins/file_manager/'+op_data.file_path+'" type="audio/mpeg"> Your browser does not support the audio element. </audio></span>');
+					$('#img_modal').modal('show');
+				}else if(isInArray(arrvideo, f_type_op))
+				{
+					$("#img_disp").html('<span class="temp_file"><video width="100%" controls> <source src="plugins/file_manager/'+op_data.file_path+'" type="video/mp4"> Your browser does not support the video tag. </video></span>');
+					$('#img_modal').modal('show');
+				}else if(isInArray(arrdocs, f_type_op))
+				{
+					$("#img_disp").html('<span class="temp_file"><embed style="width:100%;height:500px;" src="http://localhost/project/ui/plugins/file_manager/'+op_data.file_path+'"></embed></span>');
+					//$("#img_disp").html('<span class="temp_file"><iframe src="http://docs.google.com/gview?url=http://saffronwv.com/project/12.docx&embedded=true"></iframe></span>');
+					$('#img_modal').modal('show');
+					//open_docs(op_data.file_data,op_data.file_name);
+				}else
+				{
+					$("#img_disp").html('<span class="temp_file">There is no Application to open this file..</span>');
+					$('#img_modal').modal('show');
+				}
+				function isInArray(array, search)
+				{
+					return array.indexOf(search) >= 0;
+				}
+			});
+			
+		}
+		});
+}
+
+/*function open_docs(file_op_doc,file_op_doc_name)
+{
+
+	$.ajax({
+		type: "POST",
+		url: "http://saffronwv.com/project/temp/file_open_doc.php",
+		data: {'file_val':  file_op_doc ,'file_val_name':  file_op_doc_name},
+		success: function(file_op){
+		$("#img_disp").html('<span class="temp_file"><iframe style="width:100%;height:500px;" src="http://docs.google.com/gview?url=http://saffronwv.com/project/'+file_op+'&embedded=true"></iframe></span>');
+		$('#img_modal').modal('show');
+		}
+		});
+}*/
+
+function download_file(file_op_val)
+{
+	$.ajax({
+		type: "POST",
+		url: "plugins/file_manager/file_open.php",
+		data: {'file_val':  file_op_val },
+		dataType: 'json',
+		success: function(file_op){
+		
+			$.each(file_op, function (x, op_data) {
+				window.open("plugins/file_manager/"+op_data.file_path, '_blank');
+			});
+			
+		}
+		});
+}
+function save_rename()
+{
+	var rename_sav_name=$("#recipient-name").val();
+	var rename_sav_val=$("input[type='radio'][name='radio_files']:checked").val();;
+	$.ajax({
+		type: "POST",
+		url: "plugins/file_manager/file_rename.php",
+		data: {'file_val':  rename_sav_val ,'file_name':  rename_sav_name },
+		success: function(dcode_cat){
+		alert(dcode_cat);
+			
+		}
+		});
+}
+function delete_file()
+{
+var del_val=$("input[type='radio'][name='radio_files']:checked").val();
+	$.ajax({
+		type: "POST",
+		url: "plugins/file_manager/file_recycle.php",
+		data: {'file_val':  del_val },
+		success: function(dcode_cat){
+		$('#del_modal').modal('hide');
+		$('#files_'+del_val).remove();	
+		}
+		});
+}
+function view_properties(prop_val)
+{
+	$.ajax({
+		type: "POST",
+		url: "plugins/file_manager/file_details.php",
+		data: {'file_val':  prop_val },
+		dataType: 'json',
+		success: function(dcode_prop){
+		//alert(dcode_cat);
+			$.each(dcode_prop, function (m, prop_data) {
+			$("#recipient_fname").val(prop_data.f_name);
+			$("#recipient_type").val(prop_data.f_ext);
+			$("#recipient_folder").val(prop_data.f_type);
+			$("#recipient_date").val(prop_data.f_date);
+			});
+			$('#modal_details').modal('show');
+		}
+		});
+}
+$('#extra_options').hide();
+
+//extra options ends
+
+$( ".close_fm" ).click(function(){
+		$( "#file_manager_div" ).hide();
+		$( "#icon_block" ).show();
+	});
+	
+	
+$('#sort_file').on('change',function(){
+		$('#multiple_upload_form').ajaxForm({
+		url: 'plugins/file_manager/upload.php',
+			beforeSubmit:function(e){
+				$(".all_notify").append('<div style="overflow:hidden;margin:0px;background:#D4E157;margin:2px;padding:5px;text-align:center;border-radius:2px;" id="loading_notification">Uploading your file...<div class="progress"> <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"> 10 </div> </div></div>');
+			},
+			xhr: function()
+  {
+    var xhr = new window.XMLHttpRequest();
+    //Upload progress
+    xhr.upload.addEventListener("progress", function(evt){
+      if (evt.lengthComputable) {
+        var percentComplete = evt.loaded / evt.total;
+        //Do something with upload progress
+		$(".progress-bar").css("width",percentComplete*100+"%");
+		$(".progress-bar").html(percentComplete*100+"%");
+        console.log(percentComplete);
+      }
+	  
+    }, false);
+    return xhr;
+  },
+			dataType: 'json',
+			success:function(e){
+				
+                    //alert(php_script_response);
+					$('#sort_file').val('').clone(true);
+					$.each(e, function (z, f_data) {
+					$('#no_rec').hide();
+					
+					//$("#show_recents").prepend('<div style="overflow:hidden;margin:0px;display:inline-block;background:#FF9E80;margin:2px;padding:5px;text-align:center;border-radius:2px;"><p>'+php_script_response+'</p></div>');
+					$(".all_notify").append('<div style="overflow:hidden;margin:0px;background:#D4E157;margin:2px;padding:5px;text-align:center;border-radius:2px;" class="temp_notify"><p>'+f_data.f_name+'</p></div>');
+					$('#loading_notification').remove();
+			
+					});
+			},
+			error:function(e){
+			}
+		}).submit();
+});	
+	
+$('#sort_filea').on('change', function() {
+
+	$(".all_notify").append('<div style="overflow:hidden;margin:0px;background:#D4E157;margin:2px;padding:5px;text-align:center;border-radius:2px;" id="loading_notification"><p>Please wait uploading your file...</p></div>');
+    //var file_data = $('#sort_file').prop('files')[0];   
+    var form_data = new FormData();                  
+    form_data.append('file', $("#sort_file")[0].files[0]);
+    console.log($("#sort_file")[0].files[0]);   
+
+ $.ajax({
+                url: 'plugins/file_manager/upload.php',
+                dataType: 'text',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: form_data,
+				async: false,				
+                type: 'post',
+                success: function(php_script_response){
+					
+					$('#no_rec').hide();
+					
+					//$("#show_recents").prepend('<div style="overflow:hidden;margin:0px;display:inline-block;background:#FF9E80;margin:2px;padding:5px;text-align:center;border-radius:2px;"><p>'+php_script_response+'</p></div>');
+					$(".all_notify").append('<div style="overflow:hidden;margin:0px;background:#D4E157;margin:2px;padding:5px;text-align:center;border-radius:2px;"><p>'+php_script_response+'</p></div>');
+					$('#loading_notification').remove();
+                    //alert(php_script_response);
+					$('#sort_file').val('').clone(true);
+                }
+     });
+});
+
+//get_rec_files();
+
+function get_rec_files()
+{
+$.ajax({
+    type: "GET",
+    dataType: 'json',
+    url: 'plugins/file_manager/get_files.php',
+    success: function(gl){
+	if(gl==0)
+	{
+		$("#show_recents").append('<div style="width:100%;height:25px;overflow:hidden;margin:0px;" id="no_rec"><p>No recent files</p></div>');
+	}else
+	{
+		$.each(gl, function (m, r_data) {
+			$("#show_recents").append('<div style="overflow:hidden;margin:0px;display:inline-block;background:#FF9E80;margin:2px;padding:5px;text-align:center;border-radius:2px;"><p>'+r_data.f_name+'</p></div>');
+		});
+	}	
+    },
+    error: function(){
+		alert("something went wrong");
+    }
+});
+}
+/*default_folder();
+function default_folder()
+{
+$('#folder_div').html('');
+}*/
+$('.folder_holder').dblclick(function(){
+	//alert(this.id);
+	var get_id=this.id;
+	$.ajax({
+    type: "GET",
+	data:{"fold_name":"'"+get_id+"'"},
+    dataType: 'json',
+    url: 'plugins/file_manager/get_dir_files.php',
+    success: function(gl){
+	var each_data="";
+	//alert(gl);
+	if(gl==0)
+	{
+	$('#folder_div_main').hide();
+	$('#folder_div').show();
+	$('#folder_div').html('<p style="font-size:20px;text-align:center;"><i class="fa fa-folder-o" aria-hidden="true"></i> Folder empty</p>');
+	$('.back_btn').css("color","#000");
+	}else
+	{
+		$.each(gl, function (m, r_data) {
+			console.log(r_data.f_name);
+			each_data+='<span id="files_'+r_data.file_id+'"><input type="radio" id="'+r_data.f_type+'_'+r_data.file_id+'" name="radio_files" style="display:none;" f_name="'+r_data.f_name+'" value="'+r_data.file_id+'"/> <label for="'+r_data.f_type+'_'+r_data.file_id+'" class="folder_holder_label"> <div class="folder_holder" id="docs" style="font-weight:normal;"> <i class="fa fa-file" aria-hidden="true" style="color:#37474F;"></i> <p class="folder_name">'+r_data.f_name+'</p> </div> </label></span>';
+			
+			
+		});
+		
+		
+		
+		$('#extra_options').show();
+		$('#folder_div_main').hide();
+		$('#folder_div').show();
+		$('#folder_div').html(each_data);
+		$('.back_btn').css("color","#000");
+	}	
+    },
+    error: function(){
+		alert("something went wrong");
+    }
+});
+});
+
+$('.back_btn').on('click',function(){
+//alert("clicked");
+$('#extra_options').hide();
+$('#folder_div_main').show();
+$('#folder_div').hide();
+$('.back_btn').css("color","#90A4AE");
+//$('#top_navigation').html('<p style="font-size:25px;padding:10px;color:#ccc"><i class="fa fa-arrow-left" aria-hidden="true"></i></p>');
+});
+
+</script>
+</body>
+</html> 

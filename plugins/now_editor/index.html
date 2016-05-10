@@ -1,0 +1,51 @@
+<div id="now_new">
+<button type="button" class="btn btn-primary" name="new_edit">New Editor</button><br/><br/>
+<div id="all_edit_files">
+
+</div>
+</div>
+
+<div id="now_edit_editor" >
+<button type="button" class="btn btn-primary" name="now_save" id="now_save">Save</button><br/><br/>
+<div class="form-group">
+    <!--<label for="inputtitle" class="col-sm-2 control-label">Title</label>-->
+    <div>
+      <input type="text" class="form-control" id="inputtitle" placeholder="Title">
+    </div>
+</div>
+<textarea cols="80" id="editor1" name="editor1" rows="10"></textarea>
+</div>
+
+
+<script>
+//$("#now_edit_editor").hide()
+
+var editor = CKEDITOR.replace( 'editor1' );
+
+setInterval(save_data,1000);
+
+function save_data()
+{
+var edit_data=editor.getData();
+console.log(edit_data);
+	$.ajax({
+			  type: "post",
+			  url: "plugins/now_editor/save.php",//plugins/now_editor/
+			  data: {'content_edit': "" + edit_data + ""},
+			  success: function(got_data){
+			  
+			  $.each(got_data, function (m, ckdata) {
+					//CKEDITOR.instances['editor1'].setData(ckdata.now_content);
+				});
+				console.log("save Success");
+				
+				
+			  },
+			  dataType: 'json',
+			  error: function(){
+				console.log("save Failed");
+            }
+	});	
+}
+		
+</script>
