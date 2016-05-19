@@ -809,15 +809,17 @@ height:0;
 })(jQuery)
 var path="plugins/music_player/";
 //path+
-
+var u_id=localStorage.getItem('uid');
+var link_id=localStorage.getItem('link');
 $.ajax({
     type: "GET",
     url: 'plugins/music_player/get_files.php',
-	 dataType: 'json',
+	data:{"user_id":"'"+u_id+"'"},
+	dataType: 'json',
     success: function(gl){
 	var conca=[];
 		$.each(gl, function (m, m_data) {
-		conca.push({ file: "http://localhost/project/ui/plugins/file_manager/"+m_data.f_directory, thumb: "http://localhost/project/ui/plugins/music_player/01.jpg", trackName: m_data.f_name, trackArtist: "Unknown", trackAlbum: "Single", });
+		conca.push({ file: link_id+"/plugins/file_manager/"+m_data.f_directory, thumb: link_id+"/plugins/music_player/01.jpg", trackName: m_data.f_name, trackArtist: "Unknown", trackAlbum: "Single", });
 		});
 		
 		var t= {playlist: conca};

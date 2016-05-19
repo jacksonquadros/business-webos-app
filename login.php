@@ -3,7 +3,7 @@ include "connect.php";
 session_start();
 $message="";
 if(count($_POST)>0) {
-$sql = "select * FROM users WHERE user_name='" . $_POST["email"] . "' and user_password = '".$_POST["password"]."'";
+$sql = "select * FROM users WHERE user_name='" . $_POST["email"] . "' and user_password = '".md5($_POST["password"])."'";
 $result = $conn->query($sql);
 
 
@@ -43,7 +43,7 @@ header("Location:index.php");
 </header>
   <section class="login">
 	<form name="frmUser" method="post" action="">
-	<span class="top"></span>
+	<span class="top"><i class="fa fa-user" aria-hidden="true"></i></span>
 		<form id="login-form" accept-charset="utf-8" method="post" action="#">
 		<h1>Log in</h1>
 		<input type="text" value="" placeholder="Username" tabindex="20" name="email">
@@ -55,9 +55,9 @@ header("Location:index.php");
 		<span class="move_left">
 		<button class="button submit" data-analytics="sign-in" type="submit">Log in Now</button>
 		</span>
-		<!--<span class="create-account move_left">
-		<a data-analytics="create-account" href="sign_up.php">Create an Account</a>
-		</span>-->
+		<span class="create-account move_left">
+		<a data-analytics="create-account" href="signup.php">Create an Account</a>
+		</span>
 	</form>	
   </section>
 

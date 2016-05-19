@@ -1,7 +1,7 @@
 <?php
-include "connect.php";
-	
-$sql=$conn->query("select * from file_manager where f_type='audio' order by file_id desc");
+include "../../connect.php";
+$u_name=$_GET['user_id'];
+$sql=$conn->query("select * from file_manager where f_type='audio' and f_user=$u_name order by file_id desc");
 
 if ($sql->num_rows > 0) {
 	while($row=$sql->fetch_assoc()){

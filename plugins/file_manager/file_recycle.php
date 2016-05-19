@@ -1,5 +1,5 @@
 <?php
-include "connect.php";
+include "../../connect.php";
 
 $file_val=$_POST['file_val'];
 

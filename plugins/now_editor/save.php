@@ -1,7 +1,7 @@
 <?php
 header('content-type: application/json; charset=utf-8');
 
-include "connect.php";
+include "../../connect.php";
 //get post data
 $data_now = "'".$_POST['content_edit']."'";
 

@@ -1,7 +1,8 @@
 <?php
 if($_POST['image_form_submit'] == 1)
 {
-	include "connect.php";
+	$user_val=$_POST['use_val'];
+	include "../../connect.php";
 	$output=array();
 	foreach($_FILES['sort_file']['name'] as $key=>$val){
 		$image_name = $_FILES['sort_file']['name'][$key];
@@ -60,7 +61,7 @@ file_put_contents($targetPath,$fileContent);
 $up_folder="'".$targetPath."'";
 
 //inserting data to db
-$order = "INSERT INTO file_manager(f_name,f_encrypt_name,f_ext,f_type,f_directory,f_date)VALUES($original_filename,$f_encrypted_db,$f_ext_db,$f_type_db,$up_folder,$f_date_db);";
+$order = "INSERT INTO file_manager(f_name,f_encrypt_name,f_ext,f_type,f_directory,f_date,f_user)VALUES($original_filename,$f_encrypted_db,$f_ext_db,$f_type_db,$up_folder,$f_date_db,$user_val);";
 $result = $conn->query($order);
 
 $last_id = mysqli_insert_id($conn);
@@ -88,7 +89,7 @@ file_put_contents($targetPath,$fileContent);
 $up_folder="'".$targetPath."'";
 
 //inserting data to db
-$order = "INSERT INTO file_manager(f_name,f_encrypt_name,f_ext,f_type,f_directory,f_date)VALUES($original_filename,$f_encrypted_db,$f_ext_db,$f_type_db,$up_folder,$f_date_db);";
+$order = "INSERT INTO file_manager(f_name,f_encrypt_name,f_ext,f_type,f_directory,f_date,f_user)VALUES($original_filename,$f_encrypted_db,$f_ext_db,$f_type_db,$up_folder,$f_date_db,$user_val);";
 $result = $conn->query($order);
 
 $last_id = mysqli_insert_id($conn);

@@ -20,8 +20,9 @@ get_recycle_files();
 function get_recycle_files(){
 	$.ajax({
     type: "GET",
-    dataType: 'json',
-    url: 'plugins/file_manager/get_recycle_files.php',
+	data:{"user_id":"'"+usr_id+"'"},
+	url: 'plugins/file_manager/get_recycle_files.php',
+	dataType: 'json',
     success: function(gl){
 	var each_data="";
 	//alert(gl);

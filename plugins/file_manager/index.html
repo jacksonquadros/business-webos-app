@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+
 	<style>
 		.f_main_div
 		{
@@ -100,8 +98,7 @@
 			background-color:#bbb;
 		}
 	</style>
- </head>
-<body>
+
 <!-- modal begins-->
 <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="myModal">
   <div class="modal-dialog" role="document">
@@ -268,9 +265,9 @@ function destroy_file()
 {
 $('.temp_file').remove();
 }
-
+var usr_id=localStorage.getItem('uid');
 //notify upload file
-$(".all_notify").append('<br/><form method="post" name="multiple_upload_form" id="multiple_upload_form" enctype="multipart/form-data" action="upload.php"> <input type="hidden" name="image_form_submit" value="1"/> <div class="upload_block" id="upload_block"> <input type="file" name="sort_file[]" id="sort_file" multiple style="color:#fff;display:none;"> <label for="sort_file" style="overflow:hidden;margin:0px;background:#D4E157;margin:2px;padding:5px;text-align:center;border-radius:2px;width:100%;">Click here to Upload a File</label></div> </form> ');
+$(".all_notify").append('<br/><form method="post" name="multiple_upload_form" id="multiple_upload_form" enctype="multipart/form-data" action="upload.php"> <input type="hidden" name="image_form_submit" value="1"/> <input type="hidden" name="use_val" value="'+usr_id+'"/> <div class="upload_block" id="upload_block"> <input type="file" name="sort_file[]" id="sort_file" multiple style="color:#fff;display:none;"> <label for="sort_file" style="overflow:hidden;margin:0px;background:#D4E157;margin:2px;padding:5px;text-align:center;border-radius:2px;width:100%;">Click here to Upload a File</label></div> </form> ');
 //extra options onclick
 $('.top_action_fonts').click(function()
 {
@@ -542,11 +539,13 @@ function default_folder()
 $('#folder_div').html('');
 }*/
 $('.folder_holder').dblclick(function(){
-	//alert(this.id);
+var uss_id=localStorage.getItem('uid');
+
+	alert(uss_id);
 	var get_id=this.id;
 	$.ajax({
     type: "GET",
-	data:{"fold_name":"'"+get_id+"'"},
+	data:{"fold_name":"'"+get_id+"'" , "user_id":"'"+uss_id+"'"},
     dataType: 'json',
     url: 'plugins/file_manager/get_dir_files.php',
     success: function(gl){
@@ -592,5 +591,3 @@ $('.back_btn').css("color","#90A4AE");
 });
 
 </script>
-</body>
-</html> 

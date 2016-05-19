@@ -1,5 +1,5 @@
 <?php
-include "connect.php";
+include "../../connect.php";
 	
 $sql=$conn->query("select * from file_manager order by file_id desc limit 9");
 
